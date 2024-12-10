@@ -1,3 +1,4 @@
+import { RequestHandler } from "express";
 import { Request, Response } from "express";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -6,13 +7,14 @@ import { RegisterDTO, LoginDTO } from "@/types/auth.types";
 
 const prisma = new PrismaClient();
 
-export const register = async (req: Request<{}, {}, RegisterDTO>, res: Response) => {
+export const register: RequestHandler<{}, any, RegisterDTO> = async (req, res) => {
     try {
         const { email, password, name } = req.body;
 
         const existingUser = await prisma.user.findUnique({ where: { email }});
         if (existingUser) {
-            return res.status(400).json({ message: 'Email already registered' });
+            res.status(400).json({ message: 'Email already registered' });
+            return;
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -43,18 +45,20 @@ export const register = async (req: Request<{}, {}, RegisterDTO>, res: Response)
     }
 }
 
-export const login = async (req: Request<{}, {}, LoginDTO>, res: Response) => {
+export const login: RequestHandler<{}, any, LoginDTO> = async (req, res) => {
     try {
         const { email, password } = req.body;
 
         const user = await prisma.user.findUnique( {where: { email }});
         if (!user) {
-            return res.status(401).json({ message: 'Invalid credentials' });
+            res.status(401).json({ message: 'Invalid credentials' });
+            return;
         }
 
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
-            return res.status(401).json({ message: 'Invalid credentials' });
+            res.status(401).json({ message: 'Invalid credentials' });
+            return;
         }
 
         const token = jwt.sign(
