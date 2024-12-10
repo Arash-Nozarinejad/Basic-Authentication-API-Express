@@ -7,9 +7,8 @@ __Tools:__
 - Security & Auth: JWT for session tokens, bcrypt for password hashing
 - Middleware: cors for cross-origin requests
 - Testing: Jest (unit tests)
-- Documentation: OpenAPI (Swagger) for API documentation
 
-__Process:__
+__Process Overview:__
 
 1. Installed ExpressJS, TypesScript, Prisma, JWT, bcrypt, cors, ...,  created the PostgreSQL database and the subsequent schema in schema.prisma
 2. Defined Register and Login DTOs (Data Transfer Objects) as well as the AuthResponse type. _auth.types.ts_
@@ -18,4 +17,6 @@ __Process:__
 5. Defined the /register, /login, /me routes. _auth.routes.ts_
 6. Defined the error middleware. _error.middleware.ts_
 7. Defined the port and routes for the index.ts file. _index.ts_
+8. Defined the test suit and the jest.config.js
+
 
