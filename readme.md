@@ -1,6 +1,6 @@
 # Basic Authentication API
 
-_Tools:_
+__Tools:__
 
 - Backend & Language: Node.js (Latest LTS), Express.js, TypeScript
 - Database & ORM: PostgreSQL, Prisma
