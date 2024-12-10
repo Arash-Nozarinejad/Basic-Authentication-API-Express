@@ -1,3 +1,4 @@
+import { RequestHandler } from "express";
 import { Request, Response, NextFunction } from "express";
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from "@prisma/client";
@@ -11,7 +12,7 @@ export interface AuthRequest extends Request {
     };
 }
 
-export const authenticate = async (
+export const authenticate: RequestHandler = async (
     req: AuthRequest,
     res: Response,
     next: NextFunction
@@ -20,7 +21,8 @@ export const authenticate = async (
         const token = req.headers.authorization?.split(' ')[1];
 
         if (!token) {
-            return res.status(401).json({ message: 'Authentication required' });
+            res.status(401).json({ message: 'Authentication required' });
+            return;
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
@@ -34,7 +36,8 @@ export const authenticate = async (
         });
 
         if (!user) {
-            return res.status(401).json({ message: 'User not found' });
+            res.status(401).json({ message: 'User not found' });
+            return;
         }
 
         req.user = user;
